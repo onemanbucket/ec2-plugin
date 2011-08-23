@@ -1,32 +1,32 @@
 package hudson.plugins.ec2;
 
-import com.xerox.amazonws.ec2.EC2Exception;
-import com.xerox.amazonws.ec2.ImageDescription;
-import com.xerox.amazonws.ec2.InstanceType;
-import com.xerox.amazonws.ec2.Jec2;
-import com.xerox.amazonws.ec2.KeyPairInfo;
-import com.xerox.amazonws.ec2.ReservationDescription.Instance;
-import hudson.model.Describable;
-import hudson.model.Descriptor;
-import hudson.model.Descriptor.FormException;
-import hudson.model.Hudson;
-import hudson.model.TaskListener;
-import hudson.model.Label;
-import hudson.model.Node;
-import hudson.Extension;
-import hudson.Util;
-import hudson.model.labels.LabelAtom;
-import hudson.util.FormValidation;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
-
-import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import javax.servlet.ServletException;
+
+import com.xerox.amazonws.ec2.EC2Exception;
+import com.xerox.amazonws.ec2.ImageDescription;
+import com.xerox.amazonws.ec2.InstanceType;
+import com.xerox.amazonws.ec2.Jec2;
+import com.xerox.amazonws.ec2.KeyPairInfo;
+import com.xerox.amazonws.ec2.ReservationDescription.Instance;
+import hudson.Extension;
+import hudson.Util;
+import hudson.model.Describable;
+import hudson.model.Descriptor;
+import hudson.model.Descriptor.FormException;
+import hudson.model.Hudson;
+import hudson.model.Label;
+import hudson.model.Node;
+import hudson.model.TaskListener;
+import hudson.model.labels.LabelAtom;
+import hudson.util.FormValidation;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
 
 /**
  * Template of {@link EC2Slave} to launch.
@@ -209,8 +209,10 @@ public class SlaveTemplate implements Describable<SlaveTemplate> {
                 } catch (EC2Exception e) {
                     return FormValidation.error(e.getMessage());
                 }
-            } else
-                return FormValidation.ok();   // can't test
+            }
+            else {
+                return FormValidation.error("Couldn't find cloud configuration");
+            }
         }
     }
 }
