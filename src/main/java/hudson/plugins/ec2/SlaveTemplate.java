@@ -209,8 +209,10 @@ public class SlaveTemplate implements Describable<SlaveTemplate> {
                 } catch (EC2Exception e) {
                     return FormValidation.error(e.getMessage());
                 }
-            } else
-                return FormValidation.ok();   // can't test
+           }
+            else {
+                return FormValidation.error("Couldn't find cloud configuration");
+            }
         }
     }
 }
