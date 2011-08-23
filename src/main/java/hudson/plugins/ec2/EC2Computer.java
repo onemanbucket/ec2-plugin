@@ -12,8 +12,6 @@ import org.kohsuke.stapler.StaplerResponse;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -93,26 +91,7 @@ public class EC2Computer extends SlaveComputer {
     }
 
     private ReservationDescription.Instance _describeInstance() throws EC2Exception {
-    	if (_cachedInstanceDescription == null || _cachedInstanceDescriptionTimestamp < System.currentTimeMillis() - 2000) {
-    		EC2Cloud ec2Cloud = EC2Cloud.get();
-			Jec2 connect = ec2Cloud.connect();
-			EC2Slave node = getNode();
-			if (getNode() == null) {
-				throw new EC2Exception("No node!");
-			}
-			List<String> instanceId = Collections.<String>singletonList(node.getInstanceId());
-			List<ReservationDescription> instanceDescriptions = connect.describeInstances(instanceId);
-			if (instanceDescriptions == null || instanceDescriptions.size() == 0) {
-				throw new EC2Exception("Couldn't get description for instance " + instanceId);
-			}
-			List<Instance> instance = instanceDescriptions.get(0).getInstances();
-			if (instance == null || instance.size() == 0) {
-				throw new EC2Exception("Couldn't find instance " + instanceId);
-			}
-			_cachedInstanceDescription = instance.get(0);
-    		_cachedInstanceDescriptionTimestamp = System.currentTimeMillis();
-    	}
-		return _cachedInstanceDescription;
+        return EC2Cloud.get().connect().describeInstances(Collections.<String>singletonList(getNode().getInstanceId())).get(0).getInstances().get(0);
     }
 
     /**
